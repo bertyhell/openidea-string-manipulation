@@ -26,17 +26,69 @@ pub fn find(s: &str) -> Vec<(usize, usize)> {
     out
 }
 
-/// `n` + `delta`, keeping zero padding (`007` → `008`, `-01` → `00`).
+/// `n` + `delta`, keeping zero padding (`007` → `008`, `-01` → `00`). Works on
+/// the decimal digits, so numbers of any length step without overflowing.
 pub fn step(n: &str, delta: i128) -> String {
     let negative = n.starts_with('-');
     let digits = n.trim_start_matches('-');
-    let Ok(v) = digits.parse::<i128>() else {
+    if digits.is_empty() || !digits.bytes().all(|b| b.is_ascii_digit()) {
         return n.to_owned();
+    }
+    let a = digits.trim_start_matches('0');
+    let d = delta.unsigned_abs().to_string();
+    let (negative_result, magnitude) = if negative == (delta < 0) || delta == 0 {
+        (negative, add_digits(a, &d))
+    } else if longer_or_equal(a, &d) {
+        (negative, sub_digits(a, &d))
+    } else {
+        (!negative, sub_digits(&d, a))
     };
-    let v = if negative { -v } else { v };
-    let r = v.saturating_add(delta);
+    let magnitude = magnitude.trim_start_matches('0');
+    let magnitude = if magnitude.is_empty() { "0" } else { magnitude };
     let width = if digits.len() > 1 && digits.starts_with('0') { digits.len() } else { 0 };
-    if r < 0 { format!("-{:0width$}", -r) } else { format!("{r:0width$}") }
+    let sign = if negative_result && magnitude != "0" { "-" } else { "" };
+    format!("{sign}{magnitude:0>width$}")
+}
+
+/// Whether the digit string `a` is at least `b` (neither has leading zeros).
+fn longer_or_equal(a: &str, b: &str) -> bool {
+    (a.len(), a) >= (b.len(), b)
+}
+
+fn add_digits(a: &str, b: &str) -> String {
+    let (a, b) = (a.as_bytes(), b.as_bytes());
+    let mut out = Vec::with_capacity(a.len().max(b.len()) + 1);
+    let mut carry = 0;
+    for i in 0..a.len().max(b.len()) {
+        let x = a.len().checked_sub(i + 1).map_or(0, |j| a[j] - b'0');
+        let y = b.len().checked_sub(i + 1).map_or(0, |j| b[j] - b'0');
+        let s = x + y + carry;
+        out.push(b'0' + s % 10);
+        carry = s / 10;
+    }
+    if carry > 0 {
+        out.push(b'0' + carry);
+    }
+    out.iter().rev().map(|&c| c as char).collect()
+}
+
+/// `a` - `b` for `a` ≥ `b`.
+fn sub_digits(a: &str, b: &str) -> String {
+    let (a, b) = (a.as_bytes(), b.as_bytes());
+    let mut out = Vec::with_capacity(a.len());
+    let mut borrow = 0;
+    for i in 0..a.len() {
+        let x = (a[a.len() - 1 - i] - b'0') as i8;
+        let y = b.len().checked_sub(i + 1).map_or(0, |j| (b[j] - b'0') as i8);
+        let mut s = x - y - borrow;
+        borrow = 0;
+        if s < 0 {
+            s += 10;
+            borrow = 1;
+        }
+        out.push(b'0' + s as u8);
+    }
+    out.iter().rev().map(|&c| c as char).collect()
 }
 
 /// Every integer in `s` stepped by `delta`.
@@ -97,6 +149,15 @@ mod tests {
         assert_eq!(step_all("item9 v007 -1 a-1", 1), "item10 v008 0 a-2");
         assert_eq!(step_all("x0 -01", -1), "x-1 -02");
         assert_eq!(step("99", 1), "100");
+        assert_eq!(step("-1", 1), "0");
+        assert_eq!(step("-5", 3), "-2");
+        assert_eq!(step("2", -5), "-3");
+        assert_eq!(step("0", 0), "0");
+        // Beyond i128 and u128: no overflow, no saturation.
+        assert_eq!(step("170141183460469231731687303715884105727", 1), "170141183460469231731687303715884105728");
+        assert_eq!(step("9999999999999999999999999999999999999999", 1), "10000000000000000000000000000000000000000");
+        assert_eq!(step("-10000000000000000000000000000000000000000", 1), "-9999999999999999999999999999999999999999");
+        assert_eq!(step("5", i128::MIN), "-170141183460469231731687303715884105723");
         assert_eq!(at("abc 123 def", 7), Some((4, 7)));
         assert_eq!(at("abc 123 def", 2), None);
         assert_eq!(first("id: 42, 7"), Some(42));

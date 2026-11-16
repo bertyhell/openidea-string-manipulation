@@ -677,8 +677,15 @@ fn increment_duplicates(lines: Vec<String>) -> Vec<String> {
         .into_iter()
         .map(|mut l| {
             if !l.trim().is_empty() {
-                while seen.contains(&l) && !numbers::find(&l).is_empty() {
-                    l = numbers::step_all(&l, 1);
+                // Every step raises the line's numbers, so no line comes back
+                // and this ends within `seen.len()` steps. A line without
+                // numbers doesn't change and stops at once.
+                while seen.contains(&l) {
+                    let next = numbers::step_all(&l, 1);
+                    if next == l {
+                        break;
+                    }
+                    l = next;
                 }
                 seen.insert(l.clone());
             }

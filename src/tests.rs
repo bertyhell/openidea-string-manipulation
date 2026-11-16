@@ -81,6 +81,20 @@ fn creates_a_sequence_over_the_carets() {
 #[test]
 fn increments_duplicate_lines() {
     assert_eq!(after("a1\na1\na1\nb\nb", &[(0, 0, 0, 0)], "increment-duplicates"), "a1\na2\na3\nb\nb");
+    // Numbers beyond i128 and u128 still advance (they used to loop forever).
+    for n in ["170141183460469231731687303715884105727", "9999999999999999999999999999999999999999"] {
+        let next = numbers::step(n, 1);
+        assert_eq!(
+            after(&format!("id{n}\nid{n}"), &[(0, 0, 0, 0)], "increment-duplicates"),
+            format!("id{n}\nid{next}")
+        );
+    }
+    assert_eq!(after("x9\nx9\nx10", &[(0, 0, 0, 0)], "increment-duplicates"), "x9\nx10\nx11");
+    // The increment commands step big numbers too.
+    assert_eq!(
+        after("v99999999999999999999999999999999999999999", &[(0, 3, 0, 3)], "increment"),
+        "v100000000000000000000000000000000000000000"
+    );
 }
 
 #[test]
@@ -177,6 +191,22 @@ fn transforms_a_list() {
 fn json_on_the_document() {
     assert_eq!(after("{\"b\": 1, \"a\": 2}", &[(0, 0, 0, 0)], "json-sort"), "{\"a\":2,\"b\":1}");
     assert_eq!(after("{\"a\": [1, 2]}", &[(0, 3, 0, 3)], "json-minify"), "{\"a\":[1,2]}");
+}
+
+#[test]
+fn json_keeps_every_number_exactly() {
+    // Beyond u64, beyond f64 precision and range, and a trailing zero.
+    let nums = "18446744073709551617, -18446744073709551617, 0.1000000000000000055511151231257827, 1e+400, 1.50";
+    let doc = format!("{{\"z\": [{nums}], \"id\": 18446744073709551617}}");
+    let minified = format!("{{\"z\":[{}],\"id\":18446744073709551617}}", nums.replace(", ", ","));
+    assert_eq!(after(&doc, &[(0, 0, 0, 0)], "json-minify"), minified);
+    let sorted = format!("{{\"id\":18446744073709551617,\"z\":[{}]}}", nums.replace(", ", ","));
+    assert_eq!(after(&minified, &[(0, 0, 0, 0)], "json-sort"), sorted);
+    let pretty = after(&doc, &[(0, 0, 0, 0)], "json-pretty");
+    for n in nums.split(", ") {
+        assert!(pretty.contains(&format!("    {n}")), "{n} in {pretty}");
+    }
+    assert!(pretty.contains("\"id\": 18446744073709551617"), "{pretty}");
 }
 
 #[test]
