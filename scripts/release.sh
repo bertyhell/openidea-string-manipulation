@@ -4,12 +4,13 @@
 #   scripts/release.sh            tag v<version>, push the tag, create the GitHub release
 #   scripts/release.sh --dry-run  build and sign the package only
 #
-# The version comes from plugin.toml. The signing key is read from 1Password
-# (override with OP_KEY_REF) and passed to `openidea-plugin pack` through a
-# pipe, so it is never written to disk.
+# The version comes from plugin.toml. The signing key is read from the
+# "Our Family" 1Password account (override with OP_ACCOUNT and OP_KEY_REF) and
+# passed to `openidea-plugin pack` through a pipe, so it is never written to disk.
 set -euo pipefail
 
 OP_KEY_REF="${OP_KEY_REF:-op://Private/openidea string manipulation plugin signing key bert/key}"
+OP_ACCOUNT="${OP_ACCOUNT:-my.1password.com}"
 PUBLISHER="bertyhell"
 REPO="bertyhell/openidea-string-manipulation"
 
@@ -59,7 +60,7 @@ step "Building $id $version"
 openidea-plugin build
 
 step "Signing with the key from 1Password"
-key="$(op read --no-newline "$OP_KEY_REF")" || die "could not read $OP_KEY_REF"
+key="$(op read --account "$OP_ACCOUNT" --no-newline "$OP_KEY_REF")" || die "could not read $OP_KEY_REF"
 rm -f "$package"
 openidea-plugin pack . --publisher "$PUBLISHER" --key <(printf '%s' "$key") --out "$package"
 unset key

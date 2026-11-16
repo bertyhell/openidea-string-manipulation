@@ -99,8 +99,9 @@ scripts/release.sh             # also tag v<version> and create the GitHub relea
 
 It needs the [1Password CLI](https://developer.1password.com/docs/cli/)
 (`op`), `gh`, `openidea-plugin`, `jq` and `unzip`. The signing key is read with
-`op read` from the reference in `OP_KEY_REF` and goes to `openidea-plugin pack`
-through a pipe, never to disk. The script prints the package's SHA-256 and a
+`op read` from the reference in `OP_KEY_REF`, in the 1Password account
+`OP_ACCOUNT` (the "Our Family" account by default), and goes to
+`openidea-plugin pack` through a pipe, never to disk. The script prints the package's SHA-256 and a
 `[[versions]]` entry. Add that entry to `plugins/bertyhell.string-manipulation.toml`
 in [openidea-plugins](https://github.com/l0ng-ai/openidea-plugins) and open a
 pull request.
