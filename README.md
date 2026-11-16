@@ -89,15 +89,21 @@ openidea-plugin link        # load this folder in your OpenIDEA, then Settings â
 
 ### Release
 
+Set the new version in `plugin.toml` and `Cargo.toml` (and `change-notes`),
+commit and push to `main`, then run:
+
 ```sh
-openidea-plugin build
-openidea-plugin pack . --key ~/.config/openidea/bertyhell.key --publisher bertyhell
-sha256sum bertyhell.string-manipulation-<version>.oiplugin
+scripts/release.sh --dry-run   # test, build and sign only
+scripts/release.sh             # also tag v<version> and create the GitHub release
 ```
 
-Attach the package to a GitHub release tagged `v<version>`. Then add a
-`[[versions]]` entry to `plugins/bertyhell.string-manipulation.toml` in
-[openidea-plugins](https://github.com/l0ng-ai/openidea-plugins).
+It needs the [1Password CLI](https://developer.1password.com/docs/cli/)
+(`op`), `gh`, `openidea-plugin`, `jq` and `unzip`. The signing key is read with
+`op read` from the reference in `OP_KEY_REF` and goes to `openidea-plugin pack`
+through a pipe, never to disk. The script prints the package's SHA-256 and a
+`[[versions]]` entry. Add that entry to `plugins/bertyhell.string-manipulation.toml`
+in [openidea-plugins](https://github.com/l0ng-ai/openidea-plugins) and open a
+pull request.
 
 ## License
 
