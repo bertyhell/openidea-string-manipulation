@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: rustup target add wasm32-wasip2 && rustup component add clippy rustfmt
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets -- -D warnings
+      - run: cargo test
+      - name: Build and check against the latest OpenIDEA release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download -R l0ng-ai/openidea -p 'openidea-plugin-linux-x86_64.gz' -O - | gunzip > openidea-plugin
+          chmod +x openidea-plugin
+          ./openidea-plugin build

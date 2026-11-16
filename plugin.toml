@@ -1,0 +1,827 @@
+id = "bertyhell.string-manipulation"
+name = "String Manipulation"
+version = "0.1.0"
+description = "Case switching, escaping, encoding, hashing, sorting, filtering, aligning and incrementing text, on every selection at once. Press Alt+M for the menu."
+authors = ["Bert Verhelst"]
+homepage = "https://github.com/bertyhell/openidea-string-manipulation"
+license = "MIT"
+change-notes = "0.1.0 — first release: 113 actions in nine groups, a searchable menu (Alt+M) and Repeat Last Action."
+categories = ["tools"]
+# Context submenus are new in plugin API 1.3 (OpenIDEA 0.1.39).
+engines.openidea = "^1.3"
+icon = "icon.svg"
+wasm = "dist/plugin.wasm"
+# The commands are declared below, so Find Action and the keymap list them
+# before the code is ever loaded; it loads on the first one run.
+activation = ["on-command:*"]
+
+[capabilities]
+required = ["editor.read", "editor.write"]
+# Remembers the last action and prompt answers for Repeat Last Action.
+optional = ["storage"]
+
+[[contributes.keymaps]]
+command = "popup"
+key = "Alt+M"
+
+[[contributes.menus]]
+menu = "editor.context"
+command = "popup"
+submenu = "String Manipulation"
+
+[[contributes.menus]]
+menu = "editor.context"
+command = "repeat-last"
+submenu = "String Manipulation"
+
+[[contributes.menus]]
+menu = "editor.context"
+command = "case-menu"
+submenu = "String Manipulation"
+
+[[contributes.menus]]
+menu = "editor.context"
+command = "escape-menu"
+submenu = "String Manipulation"
+
+[[contributes.menus]]
+menu = "editor.context"
+command = "unicode-menu"
+submenu = "String Manipulation"
+
+[[contributes.menus]]
+menu = "editor.context"
+command = "encode-menu"
+submenu = "String Manipulation"
+
+[[contributes.menus]]
+menu = "editor.context"
+command = "increment-menu"
+submenu = "String Manipulation"
+
+[[contributes.menus]]
+menu = "editor.context"
+command = "sort-menu"
+submenu = "String Manipulation"
+
+[[contributes.menus]]
+menu = "editor.context"
+command = "filter-menu"
+submenu = "String Manipulation"
+
+[[contributes.menus]]
+menu = "editor.context"
+command = "align-menu"
+submenu = "String Manipulation"
+
+[[contributes.menus]]
+menu = "editor.context"
+command = "transform-menu"
+submenu = "String Manipulation"
+
+# --- commands (generated from ACTIONS in src/lib.rs; a test keeps them in sync)
+
+[[contributes.commands]]
+id = "popup"
+title = "String Manipulation: String Manipulation…"
+category = "String Manipulation"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "repeat-last"
+title = "String Manipulation: Repeat Last Action"
+category = "String Manipulation"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "case-menu"
+title = "String Manipulation: Switch Case…"
+category = "String Manipulation"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "escape-menu"
+title = "String Manipulation: Escape/Unescape…"
+category = "String Manipulation"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "unicode-menu"
+title = "String Manipulation: Unicode…"
+category = "String Manipulation"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "encode-menu"
+title = "String Manipulation: Encode/Decode…"
+category = "String Manipulation"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "increment-menu"
+title = "String Manipulation: Increment/Decrement…"
+category = "String Manipulation"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "sort-menu"
+title = "String Manipulation: Sort/Shuffle/Reverse…"
+category = "String Manipulation"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "filter-menu"
+title = "String Manipulation: Filter/Remove/Trim…"
+category = "String Manipulation"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "align-menu"
+title = "String Manipulation: Align…"
+category = "String Manipulation"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "transform-menu"
+title = "String Manipulation: Transform…"
+category = "String Manipulation"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "switch-case"
+title = "String Manipulation: Switch Case (camelCase → snake_case → SCREAMING_SNAKE_CASE → kebab-case → PascalCase)"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "toggle-screaming-snake-camel"
+title = "String Manipulation: Toggle SCREAMING_SNAKE_CASE / camelCase"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "toggle-snake-camel"
+title = "String Manipulation: Toggle snake_case / camelCase"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "toggle-kebab-snake"
+title = "String Manipulation: Toggle kebab-case / snake_case"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "toggle-kebab-camel"
+title = "String Manipulation: Toggle kebab-case / camelCase"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "toggle-dot-camel"
+title = "String Manipulation: Toggle dot.case / camelCase"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "toggle-pascal-camel"
+title = "String Manipulation: Toggle PascalCase / camelCase"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "toggle-words-camel"
+title = "String Manipulation: Toggle lower case words / camelCase"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "toggle-sentence-camel"
+title = "String Manipulation: Toggle First word capitalized / camelCase"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "toggle-capitalized-words-camel"
+title = "String Manipulation: Toggle Capitalized Words / camelCase"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "to-camel-case"
+title = "String Manipulation: To camelCase"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "to-pascal-case"
+title = "String Manipulation: To PascalCase"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "to-snake-case"
+title = "String Manipulation: To snake_case"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "to-screaming-snake-case"
+title = "String Manipulation: To SCREAMING_SNAKE_CASE"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "to-capitalized-snake-case"
+title = "String Manipulation: To Capitalized_Snake_Case"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "to-kebab-case"
+title = "String Manipulation: To kebab-case"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "to-dot-case"
+title = "String Manipulation: To dot.case"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "to-lower-words"
+title = "String Manipulation: To lower case words"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "to-capitalized-words"
+title = "String Manipulation: To Capitalized Words"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "to-sentence-case"
+title = "String Manipulation: To First word capitalized"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "capitalize"
+title = "String Manipulation: Capitalize"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "to-lower-case"
+title = "String Manipulation: To lower case"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "to-upper-case"
+title = "String Manipulation: To UPPER CASE"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "invert-case"
+title = "String Manipulation: Invert Case"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "to-spring-env"
+title = "String Manipulation: To Spring Boot Environment Variable"
+category = "String Manipulation › Switch Case"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "escape-java"
+title = "String Manipulation: Escape Java"
+category = "String Manipulation › Escape/Unescape"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "unescape-java"
+title = "String Manipulation: Unescape Java"
+category = "String Manipulation › Escape/Unescape"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "escape-javascript"
+title = "String Manipulation: Escape JavaScript"
+category = "String Manipulation › Escape/Unescape"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "unescape-javascript"
+title = "String Manipulation: Unescape JavaScript"
+category = "String Manipulation › Escape/Unescape"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "escape-csharp"
+title = "String Manipulation: Escape C#"
+category = "String Manipulation › Escape/Unescape"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "unescape-csharp"
+title = "String Manipulation: Unescape C#"
+category = "String Manipulation › Escape/Unescape"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "escape-json"
+title = "String Manipulation: Escape JSON"
+category = "String Manipulation › Escape/Unescape"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "unescape-json"
+title = "String Manipulation: Unescape JSON"
+category = "String Manipulation › Escape/Unescape"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "escape-html"
+title = "String Manipulation: Escape HTML"
+category = "String Manipulation › Escape/Unescape"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "unescape-html"
+title = "String Manipulation: Unescape HTML"
+category = "String Manipulation › Escape/Unescape"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "escape-xml"
+title = "String Manipulation: Escape XML"
+category = "String Manipulation › Escape/Unescape"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "unescape-xml"
+title = "String Manipulation: Unescape XML"
+category = "String Manipulation › Escape/Unescape"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "escape-sql"
+title = "String Manipulation: Escape SQL"
+category = "String Manipulation › Escape/Unescape"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "unescape-sql"
+title = "String Manipulation: Unescape SQL"
+category = "String Manipulation › Escape/Unescape"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "escape-php"
+title = "String Manipulation: Escape PHP"
+category = "String Manipulation › Escape/Unescape"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "unescape-php"
+title = "String Manipulation: Unescape PHP"
+category = "String Manipulation › Escape/Unescape"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "to-ascii"
+title = "String Manipulation: Convert Diacritics (Accents) to ASCII"
+category = "String Manipulation › Unicode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "escape-unicode"
+title = "String Manipulation: Escape Non-ASCII to Unicode (\\uXXXX)"
+category = "String Manipulation › Unicode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "unescape-unicode"
+title = "String Manipulation: Unescape Unicode (\\uXXXX) to Text"
+category = "String Manipulation › Unicode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "normalize-nfc"
+title = "String Manipulation: Unicode Normalization C (NFC)"
+category = "String Manipulation › Unicode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "normalize-nfd"
+title = "String Manipulation: Unicode Normalization D (NFD)"
+category = "String Manipulation › Unicode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "normalize-nfkc"
+title = "String Manipulation: Unicode Normalization KC (NFKC)"
+category = "String Manipulation › Unicode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "normalize-nfkd"
+title = "String Manipulation: Unicode Normalization KD (NFKD)"
+category = "String Manipulation › Unicode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "encode-base64"
+title = "String Manipulation: Encode to Base64"
+category = "String Manipulation › Encode/Decode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "decode-base64"
+title = "String Manipulation: Decode Base64"
+category = "String Manipulation › Encode/Decode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "encode-hex"
+title = "String Manipulation: Encode to Hex"
+category = "String Manipulation › Encode/Decode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "decode-hex"
+title = "String Manipulation: Decode Hex"
+category = "String Manipulation › Encode/Decode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "encode-url"
+title = "String Manipulation: Encode URL (form, space as +)"
+category = "String Manipulation › Encode/Decode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "decode-url"
+title = "String Manipulation: Decode URL (form, + as space)"
+category = "String Manipulation › Encode/Decode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "encode-url-rfc3986"
+title = "String Manipulation: Encode URL (RFC 3986)"
+category = "String Manipulation › Encode/Decode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "decode-url-rfc3986"
+title = "String Manipulation: Decode URL (RFC 3986)"
+category = "String Manipulation › Encode/Decode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "md5"
+title = "String Manipulation: Encode to MD5 Hex"
+category = "String Manipulation › Encode/Decode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "sha1"
+title = "String Manipulation: Encode to SHA-1 Hex"
+category = "String Manipulation › Encode/Decode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "sha256"
+title = "String Manipulation: Encode to SHA-256 Hex"
+category = "String Manipulation › Encode/Decode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "sha512"
+title = "String Manipulation: Encode to SHA-512 Hex"
+category = "String Manipulation › Encode/Decode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "sha3-256"
+title = "String Manipulation: Encode to SHA3-256 Hex"
+category = "String Manipulation › Encode/Decode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "sha3-512"
+title = "String Manipulation: Encode to SHA3-512 Hex"
+category = "String Manipulation › Encode/Decode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "iso-to-epoch"
+title = "String Manipulation: ISO Timestamp to Epoch Milliseconds"
+category = "String Manipulation › Encode/Decode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "epoch-to-iso"
+title = "String Manipulation: Epoch Milliseconds to ISO Timestamp"
+category = "String Manipulation › Encode/Decode"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "increment"
+title = "String Manipulation: Increment"
+category = "String Manipulation › Increment/Decrement"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "decrement"
+title = "String Manipulation: Decrement"
+category = "String Manipulation › Increment/Decrement"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "duplicate-and-increment"
+title = "String Manipulation: Duplicate and Increment"
+category = "String Manipulation › Increment/Decrement"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "duplicate-and-decrement"
+title = "String Manipulation: Duplicate and Decrement"
+category = "String Manipulation › Increment/Decrement"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "create-sequence"
+title = "String Manipulation: Create Sequence"
+category = "String Manipulation › Increment/Decrement"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "increment-duplicates"
+title = "String Manipulation: Increment Duplicates"
+category = "String Manipulation › Increment/Decrement"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "char-int"
+title = "String Manipulation: Convert Between Char and Int"
+category = "String Manipulation › Increment/Decrement"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "sort-lines"
+title = "String Manipulation: Sort Lines…"
+category = "String Manipulation › Sort/Shuffle/Reverse"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "sort-lines-asc"
+title = "String Manipulation: Sort Lines Ascending"
+category = "String Manipulation › Sort/Shuffle/Reverse"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "sort-lines-desc"
+title = "String Manipulation: Sort Lines Descending"
+category = "String Manipulation › Sort/Shuffle/Reverse"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "sort-lines-natural"
+title = "String Manipulation: Sort Lines Naturally (file2 before file10)"
+category = "String Manipulation › Sort/Shuffle/Reverse"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "sort-lines-length"
+title = "String Manipulation: Sort Lines by Length"
+category = "String Manipulation › Sort/Shuffle/Reverse"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "sort-tokens"
+title = "String Manipulation: Sort Tokens…"
+category = "String Manipulation › Sort/Shuffle/Reverse"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "sort-by-subselection"
+title = "String Manipulation: Sort Lines by Subselection"
+category = "String Manipulation › Sort/Shuffle/Reverse"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "reverse-lines"
+title = "String Manipulation: Reverse Lines"
+category = "String Manipulation › Sort/Shuffle/Reverse"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "shuffle-lines"
+title = "String Manipulation: Shuffle Lines"
+category = "String Manipulation › Sort/Shuffle/Reverse"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "reverse-chars"
+title = "String Manipulation: Reverse Characters"
+category = "String Manipulation › Sort/Shuffle/Reverse"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "shuffle-chars"
+title = "String Manipulation: Shuffle Characters"
+category = "String Manipulation › Sort/Shuffle/Reverse"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "json-sort"
+title = "String Manipulation: Sort JSON Keys"
+category = "String Manipulation › Sort/Shuffle/Reverse"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "grep"
+title = "String Manipulation: Grep (Keep Matching Lines)…"
+category = "String Manipulation › Filter/Remove/Trim"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "inverted-grep"
+title = "String Manipulation: Inverted Grep (Remove Matching Lines)…"
+category = "String Manipulation › Filter/Remove/Trim"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "remove-duplicates"
+title = "String Manipulation: Remove Duplicate Lines"
+category = "String Manipulation › Filter/Remove/Trim"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "keep-duplicates"
+title = "String Manipulation: Keep Only Duplicate Lines"
+category = "String Manipulation › Filter/Remove/Trim"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "group-and-count"
+title = "String Manipulation: Group and Count Lines"
+category = "String Manipulation › Filter/Remove/Trim"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "remove-empty-lines"
+title = "String Manipulation: Remove Empty Lines"
+category = "String Manipulation › Filter/Remove/Trim"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "remove-consecutive-empty-lines"
+title = "String Manipulation: Remove Consecutive Empty Lines"
+category = "String Manipulation › Filter/Remove/Trim"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "join-lines"
+title = "String Manipulation: Remove All Newlines (Join Lines)"
+category = "String Manipulation › Filter/Remove/Trim"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "trim"
+title = "String Manipulation: Trim"
+category = "String Manipulation › Filter/Remove/Trim"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "trim-leading"
+title = "String Manipulation: Trim Leading Whitespace"
+category = "String Manipulation › Filter/Remove/Trim"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "trim-trailing"
+title = "String Manipulation: Trim Trailing Whitespace"
+category = "String Manipulation › Filter/Remove/Trim"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "collapse-whitespace"
+title = "String Manipulation: Replace Whitespace with a Single Space"
+category = "String Manipulation › Filter/Remove/Trim"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "remove-all-spaces"
+title = "String Manipulation: Remove All Spaces"
+category = "String Manipulation › Filter/Remove/Trim"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "json-minify"
+title = "String Manipulation: Minify JSON"
+category = "String Manipulation › Filter/Remove/Trim"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "json-pretty"
+title = "String Manipulation: Pretty-Print JSON"
+category = "String Manipulation › Filter/Remove/Trim"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "align-columns"
+title = "String Manipulation: Align Lines to Columns…"
+category = "String Manipulation › Align"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "align-carets"
+title = "String Manipulation: Align Carets/Selections"
+category = "String Manipulation › Align"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "align-left"
+title = "String Manipulation: Align Left"
+category = "String Manipulation › Align"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "align-center"
+title = "String Manipulation: Align Center"
+category = "String Manipulation › Align"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "align-right"
+title = "String Manipulation: Align Right"
+category = "String Manipulation › Align"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "swap"
+title = "String Manipulation: Swap Characters/Selections"
+category = "String Manipulation › Transform"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "swap-words"
+title = "String Manipulation: Swap First and Last Word"
+category = "String Manipulation › Transform"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "toggle-quotes"
+title = "String Manipulation: Quote/Unquote"
+category = "String Manipulation › Transform"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "cycle-quotes"
+title = "String Manipulation: Cycle Quotes (\" → ' → `)"
+category = "String Manipulation › Transform"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "swap-quotes"
+title = "String Manipulation: Swap \" and '"
+category = "String Manipulation › Transform"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "straighten-quotes"
+title = "String Manipulation: Straighten Quotes (“” → \"\")"
+category = "String Manipulation › Transform"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "educate-quotes"
+title = "String Manipulation: Educate Quotes (\"\" → “”)"
+category = "String Manipulation › Transform"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "switch-path-separators"
+title = "String Manipulation: Switch File Path Separators (\\ ↔ /)"
+category = "String Manipulation › Transform"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "transform-list"
+title = "String Manipulation: Transform Delimited List…"
+category = "String Manipulation › Transform"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "create-border"
+title = "String Manipulation: Create Border…"
+category = "String Manipulation › Transform"
+when = "editorFocus"
+
