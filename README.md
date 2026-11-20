@@ -31,7 +31,7 @@ With a selection, an action works on the selected text. With only a caret:
 | Increment, Decrement, Create Sequence, Epoch → ISO | the number at the caret |
 | Quote/Unquote, Cycle Quotes | the identifier at the caret and its quotes |
 | Line actions (sort, filter, trim, align, Increment Duplicates, Create Border) | the whole document, or with several carets, the lines they are on |
-| JSON actions | the whole document |
+| Format, Minify and Sort JSON | the whole document |
 | Everything else (escaping, encoding, hashing…) | the caret's line, without its indentation |
 
 ## Actions
@@ -39,12 +39,13 @@ With a selection, an action works on the selected text. With only a caret:
 | Group | Actions |
 | --- | --- |
 | **Switch Case** | Switch Case (camelCase → snake_case → SCREAMING_SNAKE_CASE → kebab-case → PascalCase) · toggles between camelCase and SCREAMING_SNAKE_CASE, snake_case, kebab-case, dot.case, PascalCase, lower case words, First word capitalized, Capitalized Words · kebab-case ↔ snake_case · To camelCase, PascalCase, snake_case, SCREAMING_SNAKE_CASE, Capitalized_Snake_Case, kebab-case, dot.case, lower case words, Capitalized Words, First word capitalized · Capitalize · lower case · UPPER CASE · Invert Case · To Spring Boot Environment Variable |
-| **Escape/Unescape** | Java · JavaScript · C# · JSON · HTML · XML · SQL · PHP |
+| **Escape/Unescape** | Java · JavaScript · C# · HTML · XML · SQL · PHP |
+| **JSON** | Format JSON (Pretty-Print) · Minify JSON · Escape JSON · Unescape JSON · Sort JSON Keys |
 | **Unicode** | Diacritics to ASCII · Non-ASCII ↔ `\uXXXX` · NFC · NFD · NFKC · NFKD |
 | **Encode/Decode** | Base64 · Hex · URL (form and RFC 3986) · MD5, SHA-1, SHA-256, SHA-512, SHA3-256, SHA3-512 hex · ISO timestamp ↔ epoch milliseconds |
 | **Increment/Decrement** | Increment · Decrement · Duplicate and Increment/Decrement · Create Sequence · Increment Duplicates · Char ↔ Int |
-| **Sort/Shuffle/Reverse** | Sort Lines… (ascending, descending, ignoring case, natural, by length) · quick ascending/descending/natural/length sorts · Sort Tokens… · Sort Lines by Subselection · Reverse/Shuffle Lines · Reverse/Shuffle Characters · Sort JSON Keys |
-| **Filter/Remove/Trim** | Grep… and Inverted Grep… (text, or `/regex/` and `/regex/i`) · Remove Duplicate Lines · Keep Only Duplicate Lines · Group and Count · Remove Empty / Consecutive Empty Lines · Join Lines · Trim (both ends, leading, trailing) · Collapse Whitespace · Remove All Spaces · Minify JSON · Pretty-Print JSON |
+| **Sort/Shuffle/Reverse** | Sort Lines… (ascending, descending, ignoring case, natural, by length) · quick ascending/descending/natural/length sorts · Sort Tokens… · Sort Lines by Subselection · Reverse/Shuffle Lines · Reverse/Shuffle Characters |
+| **Filter/Remove/Trim** | Grep… and Inverted Grep… (text, or `/regex/` and `/regex/i`) · Remove Duplicate Lines · Keep Only Duplicate Lines · Group and Count · Remove Empty / Consecutive Empty Lines · Join Lines · Trim (both ends, leading, trailing) · Collapse Whitespace · Remove All Spaces |
 | **Align** | Align Lines to Columns… (any separator, CSV and Markdown tables) · Align Carets/Selections · Align Left/Center/Right |
 | **Transform** | Swap Characters/Selections · Swap First and Last Word · Quote/Unquote · Cycle Quotes (`"` → `'` → `` ` ``) · Swap `"` and `'` · Straighten/Educate Quotes · Switch Path Separators · Transform Delimited List… · Create Border… |
 

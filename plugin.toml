@@ -1,11 +1,11 @@
 id = "bertyhell.string-manipulation"
 name = "String Manipulation"
-version = "0.1.1"
+version = "0.1.2"
 description = "Case switching, escaping, encoding, hashing, sorting, filtering, aligning and incrementing text, on every selection at once. Press Alt+M for the menu."
 authors = ["Bert Verhelst"]
 homepage = "https://github.com/bertyhell/openidea-string-manipulation"
 license = "MIT"
-change-notes = "0.1.1 — JSON actions keep every number exactly (no rounding beyond 64 bits); Increment, Decrement and Increment Duplicates handle numbers of any length."
+change-notes = "0.1.2 — New JSON group (Alt+M and the right-click menu) with Format JSON (Pretty-Print), Minify JSON, Escape JSON, Unescape JSON and Sort JSON Keys."
 categories = ["tools"]
 # Context submenus are new in plugin API 1.3 (OpenIDEA 0.1.39).
 engines.openidea = "^1.3"
@@ -42,6 +42,11 @@ submenu = "String Manipulation"
 [[contributes.menus]]
 menu = "editor.context"
 command = "escape-menu"
+submenu = "String Manipulation"
+
+[[contributes.menus]]
+menu = "editor.context"
+command = "json-menu"
 submenu = "String Manipulation"
 
 [[contributes.menus]]
@@ -102,6 +107,12 @@ when = "editorFocus"
 [[contributes.commands]]
 id = "escape-menu"
 title = "String Manipulation: Escape/Unescape…"
+category = "String Manipulation"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "json-menu"
+title = "String Manipulation: JSON…"
 category = "String Manipulation"
 when = "editorFocus"
 
@@ -334,18 +345,6 @@ category = "String Manipulation › Escape/Unescape"
 when = "editorFocus"
 
 [[contributes.commands]]
-id = "escape-json"
-title = "String Manipulation: Escape JSON"
-category = "String Manipulation › Escape/Unescape"
-when = "editorFocus"
-
-[[contributes.commands]]
-id = "unescape-json"
-title = "String Manipulation: Unescape JSON"
-category = "String Manipulation › Escape/Unescape"
-when = "editorFocus"
-
-[[contributes.commands]]
 id = "escape-html"
 title = "String Manipulation: Escape HTML"
 category = "String Manipulation › Escape/Unescape"
@@ -391,6 +390,36 @@ when = "editorFocus"
 id = "unescape-php"
 title = "String Manipulation: Unescape PHP"
 category = "String Manipulation › Escape/Unescape"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "json-pretty"
+title = "String Manipulation: Format JSON (Pretty-Print)"
+category = "String Manipulation › JSON"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "json-minify"
+title = "String Manipulation: Minify JSON"
+category = "String Manipulation › JSON"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "escape-json"
+title = "String Manipulation: Escape JSON"
+category = "String Manipulation › JSON"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "unescape-json"
+title = "String Manipulation: Unescape JSON"
+category = "String Manipulation › JSON"
+when = "editorFocus"
+
+[[contributes.commands]]
+id = "json-sort"
+title = "String Manipulation: Sort JSON Keys"
+category = "String Manipulation › JSON"
 when = "editorFocus"
 
 [[contributes.commands]]
@@ -640,12 +669,6 @@ category = "String Manipulation › Sort/Shuffle/Reverse"
 when = "editorFocus"
 
 [[contributes.commands]]
-id = "json-sort"
-title = "String Manipulation: Sort JSON Keys"
-category = "String Manipulation › Sort/Shuffle/Reverse"
-when = "editorFocus"
-
-[[contributes.commands]]
 id = "grep"
 title = "String Manipulation: Grep (Keep Matching Lines)…"
 category = "String Manipulation › Filter/Remove/Trim"
@@ -720,18 +743,6 @@ when = "editorFocus"
 [[contributes.commands]]
 id = "remove-all-spaces"
 title = "String Manipulation: Remove All Spaces"
-category = "String Manipulation › Filter/Remove/Trim"
-when = "editorFocus"
-
-[[contributes.commands]]
-id = "json-minify"
-title = "String Manipulation: Minify JSON"
-category = "String Manipulation › Filter/Remove/Trim"
-when = "editorFocus"
-
-[[contributes.commands]]
-id = "json-pretty"
-title = "String Manipulation: Pretty-Print JSON"
 category = "String Manipulation › Filter/Remove/Trim"
 when = "editorFocus"
 
@@ -824,4 +835,3 @@ id = "create-border"
 title = "String Manipulation: Create Border…"
 category = "String Manipulation › Transform"
 when = "editorFocus"
-

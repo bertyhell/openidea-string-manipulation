@@ -67,6 +67,7 @@ enum Group {
     Menu,
     Case,
     Escape,
+    Json,
     Unicode,
     Encode,
     Numbers,
@@ -77,9 +78,10 @@ enum Group {
 }
 
 impl Group {
-    const LISTED: [Group; 9] = [
+    const LISTED: [Group; 10] = [
         Group::Case,
         Group::Escape,
+        Group::Json,
         Group::Unicode,
         Group::Encode,
         Group::Numbers,
@@ -94,6 +96,7 @@ impl Group {
             Group::Menu => "Menus",
             Group::Case => "Switch Case",
             Group::Escape => "Escape/Unescape",
+            Group::Json => "JSON",
             Group::Unicode => "Unicode",
             Group::Encode => "Encode/Decode",
             Group::Numbers => "Increment/Decrement",
@@ -137,6 +140,7 @@ pub static ACTIONS: &[Action] = &[
     a("repeat-last", "Repeat Last Action", G::Menu, Custom(|e, _| repeat_last(e))),
     a("case-menu", "Switch Case…", G::Menu, Custom(|e, _| menu(e, Some(G::Case)))),
     a("escape-menu", "Escape/Unescape…", G::Menu, Custom(|e, _| menu(e, Some(G::Escape)))),
+    a("json-menu", "JSON…", G::Menu, Custom(|e, _| menu(e, Some(G::Json)))),
     a("unicode-menu", "Unicode…", G::Menu, Custom(|e, _| menu(e, Some(G::Unicode)))),
     a("encode-menu", "Encode/Decode…", G::Menu, Custom(|e, _| menu(e, Some(G::Encode)))),
     a("increment-menu", "Increment/Decrement…", G::Menu, Custom(|e, _| menu(e, Some(G::Numbers)))),
@@ -218,8 +222,6 @@ pub static ACTIONS: &[Action] = &[
     a("unescape-javascript", "Unescape JavaScript", G::Escape, T(Line, |s| escape::unescape(s, Dialect::JavaScript))),
     a("escape-csharp", "Escape C#", G::Escape, T(Line, ok!(escape::escape_csharp))),
     a("unescape-csharp", "Unescape C#", G::Escape, T(Line, |s| escape::unescape(s, Dialect::CSharp))),
-    a("escape-json", "Escape JSON", G::Escape, T(Line, ok!(escape::escape_json))),
-    a("unescape-json", "Unescape JSON", G::Escape, T(Line, escape::unescape_json)),
     a("escape-html", "Escape HTML", G::Escape, T(Line, ok!(escape::escape_html))),
     a("unescape-html", "Unescape HTML", G::Escape, T(Line, ok!(escape::unescape_html))),
     a("escape-xml", "Escape XML", G::Escape, T(Line, ok!(escape::escape_xml))),
@@ -228,6 +230,12 @@ pub static ACTIONS: &[Action] = &[
     a("unescape-sql", "Unescape SQL", G::Escape, T(Line, ok!(escape::unescape_sql))),
     a("escape-php", "Escape PHP", G::Escape, T(Line, ok!(escape::escape_php))),
     a("unescape-php", "Unescape PHP", G::Escape, T(Line, |s| escape::unescape(s, Dialect::Php))),
+    // JSON
+    a("json-pretty", "Format JSON (Pretty-Print)", G::Json, T(Doc, transform::json_pretty)),
+    a("json-minify", "Minify JSON", G::Json, T(Doc, transform::json_minify)),
+    a("escape-json", "Escape JSON", G::Json, T(Line, ok!(escape::escape_json))),
+    a("unescape-json", "Unescape JSON", G::Json, T(Line, escape::unescape_json)),
+    a("json-sort", "Sort JSON Keys", G::Json, T(Doc, transform::json_sort)),
     // Unicode
     a("to-ascii", "Convert Diacritics (Accents) to ASCII", G::Unicode, T(Line, ok!(unicode::to_ascii))),
     a("escape-unicode", "Escape Non-ASCII to Unicode (\\uXXXX)", G::Unicode, T(Line, ok!(unicode::escape_non_ascii))),
@@ -330,7 +338,6 @@ pub static ACTIONS: &[Action] = &[
             Ok(c.into_iter().collect())
         }),
     ),
-    a("json-sort", "Sort JSON Keys", G::Sort, T(Doc, transform::json_sort)),
     // Filter / remove / trim
     a("grep", "Grep (Keep Matching Lines)…", G::Filter, Custom(|e, arg| grep(e, arg, false))),
     a("inverted-grep", "Inverted Grep (Remove Matching Lines)…", G::Filter, Custom(|e, arg| grep(e, arg, true))),
@@ -409,8 +416,6 @@ pub static ACTIONS: &[Action] = &[
         G::Filter,
         T(Line, |s| Ok(s.chars().filter(|c| !c.is_whitespace() || *c == '\n').collect())),
     ),
-    a("json-minify", "Minify JSON", G::Filter, T(Doc, transform::json_minify)),
-    a("json-pretty", "Pretty-Print JSON", G::Filter, T(Doc, transform::json_pretty)),
     // Align
     a("align-columns", "Align Lines to Columns…", G::Align, Custom(align_columns)),
     a("align-carets", "Align Carets/Selections", G::Align, Custom(|e, _| align_carets(e))),
